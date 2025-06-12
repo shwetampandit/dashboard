@@ -1,0 +1,157 @@
+/**
+ * CVETable Component
+ * Displays a table of CVEs (Common Vulnerabilities and Exposures) with their details
+ * Shows CVE ID, description, and severity level with color-coded indicators
+ */
+import React from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Typography,
+  Box,
+  CircularProgress,
+  Alert,
+} from "@mui/material";
+
+// Severity color mapping for consistent styling
+const SEVERITY_COLORS = {
+  low: "bg-[#E4F9E6]",
+  medium: "bg-[#FFE7AE]",
+  high: "bg-[#FED9D2]",
+};
+
+const CVETable = ({ cves, isLoading, error }) => {
+  if (isLoading) {
+    return (
+      <Paper
+        sx={{
+          borderRadius: "16px",
+          padding: "1.5rem",
+          width: "auto",
+          height: "fit-content",
+          boxShadow: "none",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          minHeight: "200px",
+        }}
+      >
+        <CircularProgress size={40} />
+      </Paper>
+    );
+  }
+
+  if (error) {
+    return (
+      <Paper
+        sx={{
+          borderRadius: "16px",
+          padding: "1.5rem",
+          width: "auto",
+          height: "fit-content",
+          boxShadow: "none",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          minHeight: "200px",
+        }}
+      >
+        <Alert severity="error">
+          Error loading CVEs: {error.message || 'Unknown error occurred'}
+        </Alert>
+      </Paper>
+    );
+  }
+
+  return (
+    <Paper
+      sx={{
+        borderRadius: "16px",
+        padding: "1.5rem",
+        width: "auto",
+        height: "fit-content",
+        boxShadow: "none",
+      }}
+    >
+      <TableContainer>
+        <Table
+          size="small"
+          aria-label="CVE Table"
+          sx={{ borderCollapse: "collapse" }}
+        >
+          <TableHead>
+            <TableRow>
+              <TableCell
+                colSpan={2}
+                sx={{
+                  fontSize: "18px",
+                  fontWeight: 700,
+                  fontFamily: "Inter",
+                  padding: "8px 16px 16px 0"
+                }}
+              >
+                Recently Detected CVEs
+              </TableCell>
+              <TableCell
+                sx={{
+                  fontFamily: "Inter",
+                  fontWeight: 600,
+                  padding: "8px 0 8px 16px",
+                }}
+              >
+                Severity
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {cves?.map((cve) => (
+              <TableRow 
+                key={cve.id} 
+                sx={{ borderBottom: "none" }}
+                className="hover:bg-[#f2f7fb] transition duration-200"
+              >
+                <TableCell 
+                  sx={{ 
+                    padding: "8px 16px 10px 0",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {cve.cveId}
+                </TableCell>
+                <TableCell 
+                  sx={{ 
+                    padding: "8px 16px",
+                    textAlign: "left",
+                  }}
+                >
+                  {cve.description}
+                </TableCell>
+                <TableCell
+                  sx={{ 
+                    padding: "8px 0 10px 16px",
+                    textAlign: "center"
+                  }}
+                >
+                  <div
+                    className={`inline-block px-3 py-1 text-sm rounded-full ${
+                      SEVERITY_COLORS[cve.severity.toLowerCase()] || ""
+                    }`}
+                  >
+                    {cve.severity}
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Paper>
+  );
+};
+
+export default CVETable;

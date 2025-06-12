@@ -134,6 +134,24 @@ The application uses Redux Toolkit with RTK Query for:
 - Consistent component structure
 - Comprehensive JSDoc comments
 
+## Testing
+
+This project uses [Jest](https://jestjs.io/) as the test runner with a `jsdom` environment for simulating the browser. Styles are mocked using `identity-obj-proxy` for CSS modules, and Babel is used for transforming JavaScript and TypeScript files.
+
+### Running Tests
+
+To run all test cases, use the following command:
+
+```bash
+npm test
+# or
+yarn test
+```
+
+Jest will automatically find and run all files with `.test.js`, `.test.jsx`, `.test.ts`, or `.test.tsx` extensions in your project.
+
+Test setup is configured in `jest.config.js` and `jest.setup.js`.
+
 ## Browser Support
 
 - Chrome (latest)

@@ -159,5 +159,7 @@ Test setup is configured in `jest.config.js` and `jest.setup.js`.
 - Safari (latest)
 - Edge (latest)
 
-## Reference Screenshots
+## Reference Screenshot
+
+![Screenshot (35)](https://github.com/user-attachments/assets/a0fbd528-b575-49d2-a215-4b580eb0590b)
 

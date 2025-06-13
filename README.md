@@ -127,6 +127,7 @@ The application uses Redux Toolkit with RTK Query for:
 - `npm run build` - Build for production
 - `npm run lint` - Run ESLint
 - `npm run preview` - Preview production build
+- `npm run test` - Running test cases
 
 ### Code Style
 

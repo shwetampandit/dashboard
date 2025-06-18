@@ -12,8 +12,6 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Typography,
-  Box,
   CircularProgress,
   Alert,
 } from "@mui/material";

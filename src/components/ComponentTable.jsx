@@ -28,9 +28,9 @@ const STATUS_COLORS = {
 
 // Risk score color mapping 
 const getRiskScoreColor = (score) => {
-  if (score <= 33) return "#4CAF50"; 
-  if (score <= 66) return "#FE9C27"; 
-  return "#2AA666"; 
+  if (score <= 33) return "#4CAF50";
+  if (score <= 66) return "#FE9C27";
+  return "#2AA666";
 };
 
 const ComponentTable = ({ components, isLoading, error }) => {
@@ -46,15 +46,15 @@ const ComponentTable = ({ components, isLoading, error }) => {
     return (
       <Paper
         sx={{
-          borderRadius: "16px",
-          padding: "1.5rem",
+          borderRadius: "0 16px 0 0",
+          padding: "1.5rem 1.5rem 1.5rem 0",
           width: "auto",
           height: "fit-content",
           boxShadow: "none",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          minHeight: "200px",
+          minHeight: "370px",
         }}
       >
         <CircularProgress size={40} />
@@ -66,15 +66,15 @@ const ComponentTable = ({ components, isLoading, error }) => {
     return (
       <Paper
         sx={{
-          borderRadius: "16px",
-          padding: "1.5rem",
+          borderRadius: "0 16px 0 0",
+          padding: "1.5rem 1.5rem 1.5rem 0",
           width: "auto",
           height: "fit-content",
           boxShadow: "none",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          minHeight: "200px",
+          minHeight: "370px",
         }}
       >
         <Alert severity="error">
@@ -87,21 +87,15 @@ const ComponentTable = ({ components, isLoading, error }) => {
   return (
     <Paper
       sx={{
-        borderRadius: "16px",
-        padding: "1.5rem",
+        borderRadius: "0 16px 0 0",
+        padding: "1.5rem 1.5rem 0 0",
         width: "auto",
-        height: "fit-content",
+        height: "370px",
         boxShadow: "none",
       }}
     >
-      <Typography
-        gutterBottom
-        sx={{ fontSize: "18px", fontWeight: 700, fontFamily: "Inter" }}
-      >
-        Components
-      </Typography>
 
-      <TableContainer>
+      <TableContainer sx={{ padding: "10px", borderRadius: "16px", backgroundColor: "#f2f7fb" }}>
         <Table
           size="small"
           aria-label="Components Table"
@@ -109,17 +103,30 @@ const ComponentTable = ({ components, isLoading, error }) => {
         >
           <TableHead>
             <TableRow>
+              <TableCell
+                colSpan={4}
+                sx={{
+                  fontSize: "18px",
+                  fontWeight: 700,
+                  fontFamily: "Inter",
+                  padding: "8px 16px 16px 0"
+                }}
+              >
+                Components
+              </TableCell>
+            </TableRow>
+            <TableRow>
               {tableHeaders.map((header, index) => (
                 <TableCell
                   key={header.label}
                   sx={{
                     fontFamily: "Inter",
                     fontWeight: 600,
-                    padding: index === 0 
+                    padding: index === 0
                       ? "8px 16px 8px 0"
                       : index === tableHeaders.length - 1
-                      ? "8px 0 8px 16px"
-                      : "8px 16px",
+                        ? "8px 0 8px 16px"
+                        : "8px 16px",
                     textAlign: header.align,
                     whiteSpace: "nowrap",
                   }}
@@ -143,9 +150,9 @@ const ComponentTable = ({ components, isLoading, error }) => {
                 <TableCell sx={{ padding: "8px 16px", textAlign: "center", width: "200px" }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <Box sx={{ width: '100%', mr: 1 }}>
-                      <LinearProgress 
-                        variant="determinate" 
-                        value={component.riskScore} 
+                      <LinearProgress
+                        variant="determinate"
+                        value={component.riskScore}
                         sx={{
                           height: 8,
                           borderRadius: 4,
@@ -167,9 +174,8 @@ const ComponentTable = ({ components, isLoading, error }) => {
                 {/* Styling the mitigation status based on the status */}
                 <TableCell sx={{ padding: "8px 0 10px 16px", textAlign: "center" }}>
                   <div
-                    className={`inline-block px-3 py-1 text-sm rounded-full ${
-                      STATUS_COLORS[component.mitigationStatus.toLowerCase()] || ""
-                    }`}
+                    className={`inline-block px-3 py-1 text-sm rounded-full ${STATUS_COLORS[component.mitigationStatus.toLowerCase()] || ""
+                      }`}
                   >
                     {component.mitigationStatus}
                   </div>

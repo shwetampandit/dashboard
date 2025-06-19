@@ -18,6 +18,8 @@ import {
   CardContent,
   Stack,
   CircularProgress,
+  Tabs,
+  Tab,
 } from "@mui/material";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
@@ -28,22 +30,23 @@ ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 const Dashboard = () => {
   // State for selected ECU
   const [selectedEcuId, setSelectedEcuId] = useState(1);
+  const [tabIndex, setTabIndex] = useState(0);
 
   // Data fetching hooks
-  const { 
-    data: ecus = [], 
-    error: ecuError, 
-    isLoading: isLoadingEcus 
+  const {
+    data: ecus = [],
+    error: ecuError,
+    isLoading: isLoadingEcus
   } = useGetECUsQuery();
-  
-  const { 
-    data: components = [], 
+
+  const {
+    data: components = [],
     isLoading: isLoadingComponents,
     isFetching: isFetchingComponents,
     error: componentsError
   } = useGetComponentsByEcuIdQuery(selectedEcuId);
-  
-  const { 
+
+  const {
     data: cve = null,
     isLoading: isLoadingCVE,
     isFetching: isFetchingCVE,
@@ -65,7 +68,9 @@ const Dashboard = () => {
     acc[ecu.securityStatus] = (acc[ecu.securityStatus] || 0) + 1;
     return acc;
   }, {});
-
+  // const test =() => {
+  //   console.log("in")
+  // }
   // Pie chart configuration and styling
   const pieData = {
     labels: Object.keys(statusCounts),
@@ -190,96 +195,95 @@ const Dashboard = () => {
         >
           Cybersecurity Monitoring Dashboard
         </Typography>
-
-        <Stack
-          direction={{ xs: "column", md: "row" }}
-          spacing={2}
-          alignItems="center"
+        {/* Pie Chart */}
+        <Box
+          sx={{
+            bgcolor: "#FEFFFE",
+            borderRadius: "10px",
+            width: "100%",
+            height: "100px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "end",
+            padding: "8px",
+            mb: 2,
+          }}
         >
-          {/* Summary Cards */}
-          {summaryCards.map((item, index) => (
-            <Card
-              key={index}
-              sx={{
-                bgcolor: "#DDECFC",
-                boxShadow: 0,
-                borderRadius: "10px",
-                width: "220px",
-                height: "100px",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-              }}
-            >
-              <CardContent sx={{ padding: "14px 18px" }}>
-                <Typography
-                  sx={{
-                    fontSize: "24px",
-                    fontWeight: 700,
-                    fontFamily: "Inter",
-                  }}
-                  align="left"
-                >
-                  {item.count}
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: "16px",
-                    fontWeight: 500,
-                    fontFamily: "Inter",
-                  }}
-                  align="left"
-                >
-                  {item.title}
-                </Typography>
-              </CardContent>
-            </Card>
-          ))}
-
-          {/* Security Status Pie Chart */}
-          <Box
+          <Pie
+            data={pieData}
+            options={pieOptions}
+            plugins={[ChartDataLabels]}
+            width={200}
+            height={200}
+          />
+        </Box>
+        {/* Tabs Section */}
+        <Tabs
+          value={tabIndex}
+          onChange={(_, newValue) => setTabIndex(newValue)}
+          sx={{ mt: 3 }}
+          variant="fullWidth"
+        >
+          <Tab 
+            label={`ECUs (${summaryCards[0].count})`} 
             sx={{
-              bgcolor: "#FEFFFE",
-              borderRadius: "10px",
-              width: "220px",
-              height: "100px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: "8px",
+              borderRadius: '8px 8px 0 0',
+              bgcolor: tabIndex === 0 ? '#DDECFC' : 'transparent',
+              fontWeight: tabIndex === 0 ? 700 : 500,
+              transition: 'background 0.2s',
             }}
-          >
-            <Pie
-              data={pieData}
-              options={pieOptions}
-              plugins={[ChartDataLabels]}
-              width={200}
-              height={200}
-            />
+          />
+          <Tab 
+            label={`Components (${summaryCards[1].count})`} 
+            sx={{
+              borderRadius: '8px 8px 0 0',
+              bgcolor: tabIndex === 1 ? '#DDECFC' : 'transparent',
+              fontWeight: tabIndex === 1 ? 700 : 500,
+              transition: 'background 0.2s',
+            }}
+          />
+          <Tab 
+            label={`Vulnerabilities (${summaryCards[2].count})`} 
+            sx={{
+              borderRadius: '8px 8px 0 0',
+              bgcolor: tabIndex === 2 ? '#DDECFC' : 'transparent',
+              fontWeight: tabIndex === 2 ? 700 : 500,
+              transition: 'background 0.2s',
+              marginBottom: "0"
+            }}
+          />
+        </Tabs>
+        {/* Tab Panels */}
+        {tabIndex === 0 && (
+          <Box sx={{ bgcolor: '#DDECFC', borderRadius: '0 12px 12px 12px', p: 3, mt: 0 }}>
+            <Stack direction={{ xs: "column", md: "row" }} spacing={{}}>
+              <ECUTable
+                ecus={ecus}
+                onEcuSelect={handleEcuSelect}
+                isLoading={isLoadingEcus}
+                error={ecuError}
+              />
+              <Stack spacing={{}} sx={{ flex: 1 }}>
+                <ComponentTable
+                  components={components}
+                  isLoading={isLoadingComponents || isFetchingComponents}
+                  error={componentsError}
+                />
+                <CVETable
+                  cves={cve ? [cve] : []}
+                  isLoading={isLoadingCVE || isFetchingCVE}
+                  error={cveError}
+                />
+              </Stack>
+            </Stack>
           </Box>
-        </Stack>
-      </Stack>
-
-      {/* Data Tables Section */}
-      <Stack direction={{ xs: "column", md: "row" }} spacing={3} mt={3}>
-        <ECUTable 
-          ecus={ecus} 
-          onEcuSelect={handleEcuSelect} 
-          isLoading={isLoadingEcus} 
-          error={ecuError}
-        />
-        <Stack spacing={2} sx={{ flex: 1 }}>
-          <ComponentTable 
-            components={components} 
-            isLoading={isLoadingComponents || isFetchingComponents}
-            error={componentsError}
-          />
-          <CVETable 
-            cves={cve ? [cve] : []} 
-            isLoading={isLoadingCVE || isFetchingCVE}
-            error={cveError}
-          />
-        </Stack>
+        )}
+        {tabIndex === 1 && (
+          <Box sx={{ bgcolor: '#DDECFC', borderRadius: '12px', p: 3, minHeight: 200, mt: 0 }} />
+        )}
+        {tabIndex === 2 && (
+          <Box sx={{ bgcolor: '#DDECFC', borderRadius: '12px 0 12px 12px', p: 3, minHeight: 200, mt: 0 }} />
+        )}
       </Stack>
     </Container>
   );

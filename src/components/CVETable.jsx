@@ -12,8 +12,8 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Typography,
-  Box,
+  // Typography,
+  // Box,
   CircularProgress,
   Alert,
 } from "@mui/material";
@@ -30,15 +30,15 @@ const CVETable = ({ cves, isLoading, error }) => {
     return (
       <Paper
         sx={{
-          borderRadius: "16px",
-          padding: "1.5rem",
+          borderRadius: "0 0 16px 0",
+          padding: "0 1.5rem 1.5rem 0",
           width: "auto",
           height: "fit-content",
           boxShadow: "none",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          minHeight: "200px",
+          minHeight: "220px",
         }}
       >
         <CircularProgress size={40} />
@@ -50,15 +50,15 @@ const CVETable = ({ cves, isLoading, error }) => {
     return (
       <Paper
         sx={{
-          borderRadius: "16px",
-          padding: "1.5rem",
+          borderRadius: "0 0 16px 0",
+          padding: "0 1.5rem 1.5rem 0",
           width: "auto",
           height: "fit-content",
           boxShadow: "none",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          minHeight: "200px",
+          minHeight: "220px",
         }}
       >
         <Alert severity="error">
@@ -71,14 +71,14 @@ const CVETable = ({ cves, isLoading, error }) => {
   return (
     <Paper
       sx={{
-        borderRadius: "16px",
-        padding: "1.5rem",
+        borderRadius: "0 0 16px 0",
+        padding: "1.5rem 1.5rem 5rem 0",
         width: "auto",
-        height: "fit-content",
+        height: "220px",
         boxShadow: "none",
       }}
     >
-      <TableContainer>
+      <TableContainer sx={{ padding: "10px",borderRadius: "16px", backgroundColor: "#f2f7fb"}}>
         <Table
           size="small"
           aria-label="CVE Table"

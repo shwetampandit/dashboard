@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import {
   Table,
@@ -10,7 +10,7 @@ import {
   TablePagination,
   Paper,
   Typography,
-  Box,
+  // Box,
   CircularProgress,
   Alert,
 } from "@mui/material";
@@ -23,6 +23,23 @@ import {
 const ECUTable = ({ ecus, onEcuSelect, isLoading, error }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(7);
+  const [selectedEcuId, setSelectedEcuId] = useState(1);
+
+  // Load selected ECU id from localStorage on mount
+  useEffect(() => {
+    const storedId = localStorage.getItem("selectedEcuId");
+    if (storedId) {
+      setSelectedEcuId(storedId);
+    }
+  }, []);
+
+  // Handle row click: save to localStorage and update state
+  const handleRowClick = (ecuId) => {
+    setSelectedEcuId(ecuId);
+    localStorage.setItem("selectedEcuId", ecuId);
+    onEcuSelect(ecuId);
+  };
+
   // Pagination functions
   const handleChangePage = (_, newPage) => setPage(newPage);
   const handleChangeRowsPerPage = (event) => {
@@ -47,7 +64,7 @@ const ECUTable = ({ ecus, onEcuSelect, isLoading, error }) => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          minHeight: "200px",
+          minHeight: "590px",
         }}
       >
         <CircularProgress size={40} />
@@ -67,7 +84,7 @@ const ECUTable = ({ ecus, onEcuSelect, isLoading, error }) => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          minHeight: "200px",
+          minHeight: "590px",
         }}
       >
         <Alert severity="error">
@@ -81,10 +98,10 @@ const ECUTable = ({ ecus, onEcuSelect, isLoading, error }) => {
   return (
     <Paper
       sx={{
-        borderRadius: "16px",
-        padding: "1.5rem",
+        borderRadius: "16px 0 0 16px",
+        padding: "1.5rem 0 1.5rem 1.5rem",
         width: "auto",
-        height: "fit-content",
+        height: "590px",
         boxShadow: "none",
       }}
     >
@@ -134,7 +151,19 @@ const ECUTable = ({ ecus, onEcuSelect, isLoading, error }) => {
           </TableHead>
           <TableBody>
             {slicedData.map((ecu) => (
-              <TableRow key={ecu.id} sx={{ borderBottom: "none", cursor: "pointer" }} className="hover:bg-[#f2f7fb] transition duration-200" onClick={() => onEcuSelect(ecu.id)}>
+              <TableRow
+                key={ecu.id}
+                sx={{
+                  borderBottom: "none",
+                  cursor: "pointer",
+                  backgroundColor:
+                    selectedEcuId == ecu.id
+                      ? "#f2f7fb" 
+                      : "inherit",
+                }}
+                className="hover:bg-[#f2f7fb] transition duration-200"
+                onClick={() => handleRowClick(ecu.id)}
+              >
                 <TableCell sx={{ padding: "8px 16px 10px 0" }}>
                   {ecu.name}
                 </TableCell>

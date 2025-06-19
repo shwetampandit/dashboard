@@ -6,13 +6,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const apiSlice = createApi({
-  // Name for this API in Redux
   reducerPath: 'api',
-  // Set the base URL for all API calls
   baseQuery: fetchBaseQuery({ 
     baseUrl: 'https://securethingsmockapi.onrender.com' 
   }),
-  // Define API endpoints
   endpoints: (builder) => ({
     getECUs: builder.query({
       query: () => '/api/ecus',
